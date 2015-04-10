@@ -1486,15 +1486,15 @@
                 // then we assume it's a sring with a valiud url
                 // I took out url validation because it does more harm than good here.
                 m.request({
-                    method: 'GET',
-                    url: data,
-                    extract: function (xhr, xhrOpts) {
-                        if (xhr.status !== 200) {
-                            return self.options.ondataloaderror(xhr);
+		    method: "GET", 
+		    url: data,
+		    extract: function(xhr, xhrOpts) {
+                        if (xhr.status !== 200 && self.options.ondataloadError){
+                            self.options.ondataloadError(xhr);
                         }
                         return xhr.responseText;
                     }
-                })
+		})
                     .then(function _requestBuildtree(value) {
                         if (self.options.lazyLoadPreprocess) {
                             value = self.options.lazyLoadPreprocess.call(self, value);
