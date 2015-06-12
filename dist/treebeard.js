@@ -901,7 +901,7 @@
                 o;
             for (i = 0; i < cols.length; i++) {
                 o = cols[i];
-                if (o.filter && item.data[o.data].toString().toLowerCase().indexOf(filter) !== -1) {
+                if (o.filter && o.data === 'name' && item.data[o.data].toString().toLowerCase().indexOf(filter) !== -1) {
                     titleResult = true;
                 }
             }
