@@ -2209,132 +2209,133 @@
                                             ])
                                         ]);
                                     } else {
-                                        return m(".tb-row", { // Events and attribtues for entire row
-                                            "key": id,
-                                            "class": css + " " + oddEvenClass,
-                                            "data-id": id,
-                                            "data-level": indent,
-                                            "data-index": item,
-                                            "data-rIndex": index,
-                                            style: "height: " + ctrl.options.rowHeight + "px;",
-                                            onclick: function _rowClick(event) {
-                                                var el = $(event.target);
-                                                if(el.hasClass('tb-toggle-icon') || el.hasClass('fa-plus') || el.hasClass('fa-minus')) {
-                                                    return;
-                                                }
-                                                if (ctrl.options.multiselect) {
-                                                    ctrl.handleMultiselect(id, index, event);
-                                                }
-                                                ctrl.selected = id;
-                                                if (ctrl.options.onselectrow) {
-                                                    ctrl.options.onselectrow.call(ctrl, tree, event);
-                                                }
-                                            },
-                                            ondblclick : function _ondblclick(event){
-                                                var self = this;
-                                                if ($.isFunction(ctrl.options.ondblclickrow)) {
-                                                    ctrl.options.ondblclickrow.call(ctrl, tree, event);
-                                                }
-                                            },
-                                            onmouseover: function _rowMouseover(event) {
-                                                ctrl.mouseon = id;
-                                                if (ctrl.options.hoverClass && !ctrl.dragOngoing) {
-                                                    ctrl.select('.tb-row').removeClass(ctrl.options.hoverClass);
-                                                    $(this).addClass(ctrl.options.hoverClass);
-                                                }
-                                                if (ctrl.options.onmouseoverrow) {
-                                                    ctrl.options.onmouseoverrow.call(ctrl, tree, event);
-                                                }
-                                            }
-                                        }, [
-                                            /**
-                                             * Build individual columns depending on the resolveRows
-                                             */
-                                            rowCols.map(function _mapColumnsContent(col, index) {
-                                                var cell,
-                                                    title,
-                                                    colInfo = ctrl.options.columnTitles.call(ctrl)[index],
-                                                    colcss = col.css || '';
-                                                var width = ctrl.colsizes[index] ? ctrl.colsizes[index] + '%' : colInfo.width;
-                                                cell = m('.tb-td.tb-col-' + index, {
-                                                    'class': colcss,
-                                                    style: "width:" + width
-                                                }, [
-                                                    m('span', row[col.data])
-                                                ]);
-                                                if (tree.notify.on && tree.notify.column === index) {
-                                                    return m('.tb-td.tb-col-' + index, {
-                                                        style: "width:" + width
-                                                    }, [
-                                                        m('.tb-notify.alert-' + tree.notify.type, {
-                                                            'class': tree.notify.css
-                                                        }, [
-                                                            m('span', tree.notify.message)
-                                                        ])
-                                                    ]);
-                                                }
-                                                if (col.folderIcons) {
-                                                    if (col.custom) {
-                                                        title = m("span.title-text", col.custom.call(ctrl, tree, col));
-                                                    } else {
-                                                        title = m("span.title-text", row[col.data] + " ");
+                                        if ( (!(rowCols[0].show)) || (rowCols[0].show.call(ctrl, tree)) ){
+                                            return m(".tb-row", { // Events and attribtues for entire row
+                                                "key": id,
+                                                "class": css + " " + oddEvenClass,
+                                                "data-id": id,
+                                                "data-level": indent,
+                                                "data-index": item,
+                                                "data-rIndex": index,
+                                                style: "height: " + ctrl.options.rowHeight + "px;",
+                                                onclick: function _rowClick(event) {
+                                                    var el = $(event.target);
+                                                    if(el.hasClass('tb-toggle-icon') || el.hasClass('fa-plus') || el.hasClass('fa-minus')) {
+                                                        return;
                                                     }
-                                                    cell = m('.tb-td.td-title.tb-col-' + index, {
-                                                        "data-id": id,
-                                                        'class': colcss,
-                                                        style: "padding-left: " + padding + "px; width:" + width
-                                                    }, [
-                                                        m("span.tb-td-first", // Where toggling and folder icons are
-                                                            (function _toggleView() {
-                                                                var resolveIcon = ctrl.options.resolveIcon.call(ctrl, tree); // Should return false if no icon is needed
-                                                                var resolveToggle = ctrl.options.resolveToggle.call(ctrl, tree); // Should return false if no icon is needed
-                                                                var set = [{
-                                                                    'id': 1,
-                                                                    'css': 'tb-expand-icon-holder',
-                                                                    'resolve': resolveIcon
-                                                                }, {
-                                                                    'id': 2,
-                                                                    'css': 'tb-toggle-icon',
-                                                                    'resolve': resolveToggle
-                                                                }];
-                                                                var templateIcon = m('span.' + set[0].css, {
-                                                                        key: set[0].id
-                                                                    },
-                                                                    set[0].resolve
-                                                                );
-                                                                var templateToggle = m('span.' + set[1].css, {
-                                                                    key: set[1].id,
-                                                                    onclick: function _folderToggleClick(event) {
-                                                                        if (ctrl.options.togglecheck.call(ctrl, tree)) {
-                                                                            ctrl.toggleFolder(item, event);
-                                                                        }
-                                                                    }
-                                                                }, set[1].resolve);
-                                                                if (ctrl.filterOn && resolveIcon) {
-                                                                    return templateIcon;
-                                                                }
-                                                                return [
-                                                                    templateToggle, // Don't make toggle optional
-                                                                    resolveIcon ? templateIcon : ''
-                                                                ];
-                                                            }())
-                                                        ),
-                                                        title
-                                                    ]);
+                                                    if (ctrl.options.multiselect) {
+                                                        ctrl.handleMultiselect(id, index, event);
+                                                    }
+                                                    ctrl.selected = id;
+                                                    if (ctrl.options.onselectrow) {
+                                                        ctrl.options.onselectrow.call(ctrl, tree, event);
+                                                    }
+                                                },
+                                                ondblclick : function _ondblclick(event){
+                                                    var self = this;
+                                                    if ($.isFunction(ctrl.options.ondblclickrow)) {
+                                                        ctrl.options.ondblclickrow.call(ctrl, tree, event);
+                                                    }
+                                                },
+                                                onmouseover: function _rowMouseover(event) {
+                                                    ctrl.mouseon = id;
+                                                    if (ctrl.options.hoverClass && !ctrl.dragOngoing) {
+                                                        ctrl.select('.tb-row').removeClass(ctrl.options.hoverClass);
+                                                        $(this).addClass(ctrl.options.hoverClass);
+                                                    }
+                                                    if (ctrl.options.onmouseoverrow) {
+                                                        ctrl.options.onmouseoverrow.call(ctrl, tree, event);
+                                                    }
                                                 }
-                                                if (!col.folderIcons && col.custom) { // If there is a custom call.
+                                            }, [
+                                                /**
+                                                 * Build individual columns depending on the resolveRows
+                                                 */
+                                                rowCols.map(function _mapColumnsContent(col, index) {
+                                                    var cell,
+                                                        title,
+                                                        colInfo = ctrl.options.columnTitles.call(ctrl)[index],
+                                                        colcss = col.css || '';
+                                                    var width = ctrl.colsizes[index] ? ctrl.colsizes[index] + '%' : colInfo.width;
                                                     cell = m('.tb-td.tb-col-' + index, {
                                                         'class': colcss,
                                                         style: "width:" + width
                                                     }, [
-                                                        col.custom.call(ctrl, tree, col)
+                                                        m('span', row[col.data])
                                                     ]);
-                                                }
-                                                return cell;
-                                            })
-                                        ]);
+                                                    if (tree.notify.on && tree.notify.column === index) {
+                                                        return m('.tb-td.tb-col-' + index, {
+                                                            style: "width:" + width
+                                                        }, [
+                                                            m('.tb-notify.alert-' + tree.notify.type, {
+                                                                'class': tree.notify.css
+                                                            }, [
+                                                                m('span', tree.notify.message)
+                                                            ])
+                                                        ]);
+                                                    }
+                                                    if (col.folderIcons) {
+                                                        if (col.custom) {
+                                                            title = m("span.title-text", col.custom.call(ctrl, tree, col));
+                                                        } else {
+                                                            title = m("span.title-text", row[col.data] + " ");
+                                                        }
+                                                        cell = m('.tb-td.td-title.tb-col-' + index, {
+                                                            "data-id": id,
+                                                            'class': colcss,
+                                                            style: "padding-left: " + padding + "px; width:" + width
+                                                        }, [
+                                                            m("span.tb-td-first", // Where toggling and folder icons are
+                                                                (function _toggleView() {
+                                                                    var resolveIcon = ctrl.options.resolveIcon.call(ctrl, tree); // Should return false if no icon is needed
+                                                                    var resolveToggle = ctrl.options.resolveToggle.call(ctrl, tree); // Should return false if no icon is needed
+                                                                    var set = [{
+                                                                        'id': 1,
+                                                                        'css': 'tb-expand-icon-holder',
+                                                                        'resolve': resolveIcon
+                                                                    }, {
+                                                                        'id': 2,
+                                                                        'css': 'tb-toggle-icon',
+                                                                        'resolve': resolveToggle
+                                                                    }];
+                                                                    var templateIcon = m('span.' + set[0].css, {
+                                                                            key: set[0].id
+                                                                        },
+                                                                        set[0].resolve
+                                                                    );
+                                                                    var templateToggle = m('span.' + set[1].css, {
+                                                                        key: set[1].id,
+                                                                        onclick: function _folderToggleClick(event) {
+                                                                            if (ctrl.options.togglecheck.call(ctrl, tree)) {
+                                                                                ctrl.toggleFolder(item, event);
+                                                                            }
+                                                                        }
+                                                                    }, set[1].resolve);
+                                                                    if (ctrl.filterOn && resolveIcon) {
+                                                                        return templateIcon;
+                                                                    }
+                                                                    return [
+                                                                        templateToggle, // Don't make toggle optional
+                                                                        resolveIcon ? templateIcon : ''
+                                                                    ];
+                                                                }())
+                                                            ),
+                                                            title
+                                                        ]);
+                                                    }
+                                                    if (!col.folderIcons && col.custom) { // If there is a custom call.
+                                                        cell = m('.tb-td.tb-col-' + index, {
+                                                            'class': colcss,
+                                                            style: "width:" + width
+                                                        }, [
+                                                            col.custom.call(ctrl, tree, col)
+                                                        ]);
+                                                    }
+                                                    return cell;
+                                                })
+                                            ]);
+                                        }
                                     }
-
                                 })
                             ])
 
