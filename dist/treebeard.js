@@ -1683,10 +1683,11 @@
                     url: data,
                     config: self.options.xhrconfig,
                     extract: function (xhr, xhrOpts) {
+                        var xhrResponseText = xhr.status !== 200 ? JSON.stringify(xhr.responseText) : xhr.responseText;
                         if (xhr.status !== 200) {
-                            return self.options.ondataloaderror(xhr);
+                            self.options.ondataloaderror(xhr);
                         }
-                        return xhr.responseText;
+                        return xhrResponseText;
                     }
                 })
                     .then(function _requestBuildtree(value) {
