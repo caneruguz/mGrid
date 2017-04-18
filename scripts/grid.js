@@ -1029,6 +1029,7 @@
             var len = self.flatData.length,
                 tree = Indexes[self.flatData[index].id],
                 item = self.flatData[index],
+                data,
                 child,
                 skip = false,
                 skipLevel = item.depth,
@@ -1064,14 +1065,15 @@
                                     value = self.options.lazyLoadPreprocess.call(self, value);
                                 }
                                 if (!$.isArray(value)) {
-                                    value = value.data;
+                                    value = self.options.dataLocation ? self.options.dataLocation(value.data) : value.data;
                                 }
                                 var isUploadItem = function(element) {
                                     return element.data.tmpID;
                                 };
                                 tree.children = tree.children.filter(isUploadItem);
                                 for (i = 0; i < value.length; i++) {
-                                    child = self.buildTree(value[i], tree);
+                                    data = self.options.dataLocation ? self.options.dataLocation(value[i]) : value[i];
+                                    child = self.buildTree(data, tree);
                                     tree.add(child);
                                 }
                                 tree.open = true;
